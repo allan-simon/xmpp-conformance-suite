@@ -27,10 +27,8 @@ class EchoBot(ClientXMPP):
         )
 
     def participant_online(self, msg):
-        print(self.nick +": oh a presence")
         if msg['muc'].getNick() != SECOND_BOT:
             return
-        print(msg['muc'].getNick())
 
         iq = self.makeIqSet()
         iq['to'] = ROOM_JID
@@ -38,7 +36,7 @@ class EchoBot(ClientXMPP):
         item = ET.Element(
             'item',
             {
-                'role' : 'moderator',
+                'role' : 'non-existing',
                 'nick'  : SECOND_BOT
             }
         )
@@ -46,27 +44,24 @@ class EchoBot(ClientXMPP):
         iq.append(query)
 
         print(
-            "An Admin set iq with a malformed jid attribute in item tag  " +
-            "should return a jid-malformed error ..." ,
+            "An Admin set iq with a non existing role in item tag  " +
+            "should return a not-acceptable error ..." ,
             sep = ' ',
             end=''
         )
 
         try:
             stanza = iq.send()
-            print(stanza)
-            print('plop[fail]')
+            print('[fail]')
 
         except IqError as e:
-            if e.iq['error']['condition'] == 'jid-malformed':
+            if e.iq['error']['type'] == 'modify' and e.iq['error']['condition'] == 'not-acceptable' :
                 print('[pass]')
             else:
-                print(e.iq)
-                print('errr[fail]')
+                print("[fail]")
         except IqTimeout:
-            print("timeout[fail]")
+            print("[fail]")
 
-        print("send message")
         self.send_message(
             mto=ROOM_JID,
             mbody="disconnect %s" % SECOND_BOT,
@@ -75,7 +70,6 @@ class EchoBot(ClientXMPP):
         #self.disconnect()
     def participant_offline(self, presence):
         if presence['muc'].getNick() == SECOND_BOT:
-            print("bye %s" % self.nick)
             self.disconnect()
             return
 
@@ -113,10 +107,7 @@ class SecondBot(ClientXMPP):
         )
 
     def muc_message(self, msg):
-        print("prouuuuut")
-        print(msg['mucnick'])
         if msg['body'] == 'disconnect %s' % SECOND_BOT:
-            print("bye %s" % self.nick)
             self.disconnect()
 
 

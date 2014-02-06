@@ -32,8 +32,6 @@ class EchoBot(ClientXMPP):
         query.append(item)
         iq.append(query)
 
-        print(iq)
-
         print(
             "If an admin get iq contain an item with neither " +
             "affiliation nor role, it must return an error iq ..." ,
