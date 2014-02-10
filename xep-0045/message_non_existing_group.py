@@ -1,6 +1,7 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
+
+from ConformanceUtils import init_test
 
 class EchoBot(ClientXMPP):
 
@@ -31,12 +32,7 @@ class EchoBot(ClientXMPP):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
+    init_test(
+        number_of_bot = 1,
+        class_first_bot = EchoBot
     )
-
-    xmpp = EchoBot('allan@akario.local', 'plop', "bot_1")
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
