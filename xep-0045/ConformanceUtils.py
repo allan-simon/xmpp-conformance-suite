@@ -26,6 +26,12 @@ def init_test(
     if number_of_bot >= 2:
         spawn_second_bot(class_second_bot)
 
+def init_test_one_bot(class_bot):
+    init_test(
+        number_of_bot=1,
+        class_first_bot=class_bot
+    )
+
 def start_logging ():
     logging.basicConfig(
         level=logging.ERROR,
@@ -33,19 +39,21 @@ def start_logging ():
     )
 
 
+def spawn_muc_bot(bot_class, bot_jid, bot_password, bot_nick):
 
-def spawn_owner_bot (OwnerBotClass):
-
-    xmpp = OwnerBotClass(OWNER_BOT_JID, BOT_PASSWORD, OWNER_BOT)
+    xmpp = bot_class(bot_jid, bot_password, bot_nick)
     xmpp.register_plugin('xep_0045')
+
+    #TODO: required only for disco related test
+    xmpp.register_plugin('xep_0030')
     xmpp.connect()
     xmpp.process(block=False)
 
-def spawn_second_bot (SecondBotClass):
 
-    xmpp2 = SecondBotClass(SECOND_BOT_JID, BOT_PASSWORD, SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)
+def spawn_owner_bot (OwnerBotClass):
+    spawn_muc_bot(OwnerBotClass, OWNER_BOT_JID, BOT_PASSWORD, OWNER_BOT)
+
+def spawn_second_bot (SecondBotClass):
+    spawn_muc_bot(SecondBotClass, SECOND_BOT_JID, BOT_PASSWORD, SECOND_BOT)
 
 
