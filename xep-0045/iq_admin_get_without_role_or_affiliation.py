@@ -1,11 +1,12 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
-ADMIN_NS = "http://jabber.org/protocol/muc#admin"
+from config import ADMIN_NS
+
+from ConformanceUtils import init_test_one_bot
 
 class EchoBot(ClientXMPP):
 
@@ -52,12 +53,4 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
-
-    xmpp = EchoBot('allan@akario.local', 'plop', "bot_1")
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
+    init_test_one_bot(EchoBot)
