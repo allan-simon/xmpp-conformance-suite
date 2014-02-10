@@ -2,11 +2,13 @@ from __future__ import print_function
 import logging
 from sleekxmpp import ClientXMPP
 
-ROOM_JID = "plop@conference.akario.local"
-SECOND_BOT_JID = "psi@akario.local"
-OWNER_BOT_JID = "allan@akario.local"
-SECOND_BOT = "bot_2"
-OWNER_BOT = "bot_1"
+from ConformanceUtils import init_test
+
+from config import OWNER_BOT
+from config import SECOND_BOT_JID
+from config import ROOM_JID
+
+
 ASK_SECOND_BOT_TO_SEND_MUC_MESSAGE = "try to send a muc message without joining"
 
 class FirstBot(ClientXMPP):
@@ -81,14 +83,7 @@ class SecondBot(ClientXMPP):
         self.disconnect()
 
 
-
-
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
-
 
     print(
         "If someone try to send a message to a group he's not part of " +
@@ -97,12 +92,7 @@ if __name__ == '__main__':
         end=''
     )
 
-    xmpp = FirstBot(OWNER_BOT_JID, 'plop', OWNER_BOT)
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
-
-    xmpp2 = SecondBot(SECOND_BOT_JID, 'plop', SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)
+    init_test(
+        class_first_bot = FirstBot,
+        class_second_bot = SecondBot
+    )
