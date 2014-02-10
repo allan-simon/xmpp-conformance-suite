@@ -19,3 +19,5 @@ BOT_PASSWORD = 'plop'
 # as they're not supposed to be edited
 ADMIN_NS = "http://jabber.org/protocol/muc#admin"
 
+DISCO_INFO_NS = "http://jabber.org/protocol/disco#info"
+
