@@ -1,15 +1,15 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
-ADMIN_NS = "http://jabber.org/protocol/muc#admin"
 
-ROOM_JID = "plop@conference.akario.local"
-OWNER_BOT = "bot_1"
-SECOND_BOT = "bot_2"
+from ConformanceUtils import init_test
+
+from config import OWNER_BOT
+from config import SECOND_BOT
+from config import ROOM_JID
 
 #TODO still need to add little more test to see if the set role
 # is actually effective
@@ -96,11 +96,6 @@ class SecondBot(ClientXMPP):
         )
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
-
     print(
         "If a non owner/admin moderator try to change the role of the owner " +
         "it should return a not-allowed error ..." ,
@@ -108,12 +103,7 @@ if __name__ == '__main__':
         end=''
     )
 
-    xmpp = EchoBot('allan@akario.local', 'plop', OWNER_BOT)
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
-
-    xmpp2 = SecondBot('psi@akario.local', 'plop', SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)
+    init_test(
+        class_first_bot = EchoBot,
+        class_second_bot = SecondBot
+    )
