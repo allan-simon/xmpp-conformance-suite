@@ -1,5 +1,4 @@
 from __future__ import print_function
-from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
@@ -8,24 +7,24 @@ from sleekxmpp.xmlstream import ET
 from ConformanceUtils import init_test_one_bot
 
 from config import ADMIN_NS
+from config import ROOM_JID
 
-class EchoBot(ClientXMPP):
+from JoinMUCBot import JoinTestMUCBot
+
+class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-
-        self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
-            self.nick,
-            wait=True
+        JoinTestMUCBot.__init__(self, jid, password, nick)
+        self.add_event_handler(
+            "muc::%s::got_online" % ROOM_JID,
+            self.participant_online
         )
+
+    def participant_online(self, msg):
+        if msg['muc'].getNick() != self.nick:
+            print("[fail]")
+            self.disconnect()
+            return
 
         iq = self.makeIqGet()
         iq['to'] = "plop@conference.akario.local"
@@ -36,13 +35,6 @@ class EchoBot(ClientXMPP):
         )
         query.append(item)
         iq.append(query)
-
-        print(
-            "a admin get iq to get all occupants with affiliation " +
-            " 'owner',should succeed if made by the owner  ..." ,
-            sep = ' ',
-            end=''
-        )
 
         try:
             stanza = iq.send()
@@ -60,4 +52,12 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
+    print(
+        "a admin get iq to get all occupants with affiliation " +
+        " 'owner',should succeed if made by the owner  ..." ,
+        sep = ' ',
+        end=''
+    )
+
+
     init_test_one_bot(EchoBot)

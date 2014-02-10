@@ -1,34 +1,35 @@
 from __future__ import print_function
-from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
 
 from config import ADMIN_NS
+from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
 
-class EchoBot(ClientXMPP):
+from JoinMUCBot import JoinTestMUCBot
+
+class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-
-        self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
-            self.nick,
-            wait=True
+        JoinTestMUCBot.__init__(self, jid, password, nick)
+        self.add_event_handler(
+            "muc::%s::got_online" % ROOM_JID,
+            self.participant_online
         )
 
+
+    def participant_online(self, msg):
+        if msg['muc'].getNick() != self.nick:
+            print("[fail]")
+            self.disconnect()
+            return
+
+        #TODO: can be replaced by a getRole function I suppose
         iq = self.makeIqGet()
-        iq['to'] = "plop@conference.akario.local"
+        iq['to'] = ROOM_JID
         query = ET.Element('{%s}query' % ADMIN_NS)
         item = ET.Element(
             'item',

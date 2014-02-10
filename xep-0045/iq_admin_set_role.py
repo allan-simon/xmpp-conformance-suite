@@ -1,5 +1,4 @@
 from __future__ import print_function
-from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
@@ -11,15 +10,15 @@ from config import SECOND_BOT
 
 from ConformanceUtils import init_test
 
+from JoinMUCBot import JoinTestMUCBot
+
 #TODO still need to add little more test to see if the set role
 # is actually effective
 
-class EchoBot(ClientXMPP):
+class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
+        JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler(
             "muc::%s::got_online" % ROOM_JID,
             self.participant_online
@@ -76,38 +75,11 @@ class EchoBot(ClientXMPP):
             self.disconnect()
             return
 
-
-
-
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
-        )
-class SecondBot(ClientXMPP):
+class SecondBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
+        JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler("groupchat_message", self.muc_message)
-
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
-        )
 
     def muc_message(self, msg):
         if msg['body'] == 'disconnect %s' % SECOND_BOT:

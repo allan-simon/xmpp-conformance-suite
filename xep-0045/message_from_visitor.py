@@ -1,5 +1,6 @@
 from __future__ import print_function
-from sleekxmpp import ClientXMPP
+
+from JoinMUCBot import JoinTestMUCBot
 
 from ConformanceUtils import init_test
 
@@ -11,12 +12,10 @@ FORBIDDEN_MESSAGE = "nobody allow me to talk"
 #TODO echo bot tell second bot that now he can try to send a message
 # second bot send a message => should get "forbidden"
 
-class EchoBot(ClientXMPP):
+class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
+        JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler(
             "muc::%s::got_online" % ROOM_JID,
             self.participant_online
@@ -48,39 +47,12 @@ class EchoBot(ClientXMPP):
             self.disconnect()
             return
 
-
-
-
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
-        )
-class SecondBot(ClientXMPP):
+class SecondBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
+        JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler("groupchat_message", self.muc_message)
         self.add_event_handler("groupchat_message_error", self.muc_message_error)
-
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
-        )
 
     def muc_message(self, msg):
         if msg['body'] == TRY_SEND_MESSAGE:
