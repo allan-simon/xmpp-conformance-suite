@@ -1,15 +1,13 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
-from sleekxmpp.exceptions import IqError
-from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-ADMIN_NS = "http://jabber.org/protocol/muc#admin"
+from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import spawn_muc_bot
 
-ROOM_JID = "plop@conference.akario.local"
-SECOND_BOT_JID = "psi@akario.local"
-SECOND_BOT = "bot_2"
+from config import ROOM_JID
+from config import SECOND_BOT_JID
+from config import OWNER_BOT
+
 TRY_SEND_MESSAGE = "try send message"
 FORBIDDEN_MESSAGE = "nobody allow me to talk"
 
@@ -66,7 +64,7 @@ class SecondBot(ClientXMPP):
 
     def groupchat_presence(self, presence):
 
-        conflictFrom = "%s/%s" % (ROOM_JID, SECOND_BOT)
+        conflictFrom = "%s/%s" % (ROOM_JID, OWNER_BOT)
 
         # TODO: to make the test more precise we should check that the error
         # code is 409 conflict
@@ -96,10 +94,6 @@ class SecondBot(ClientXMPP):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
 
     print(
         "If a room participant with role visitor try to send a message " +
@@ -108,12 +102,5 @@ if __name__ == '__main__':
         end=''
     )
 
-    xmpp = EchoBot('allan@akario.local', 'plop', SECOND_BOT)
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
-
-    xmpp2 = SecondBot(SECOND_BOT_JID, 'plop', SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)
+    init_test_one_bot(EchoBot)
+    spawn_muc_bot(SecondBot, SECOND_BOT_JID, 'plop', OWNER_BOT)
