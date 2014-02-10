@@ -1,14 +1,16 @@
 from __future__ import print_function
-import logging
+
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
-ADMIN_NS = "http://jabber.org/protocol/muc#admin"
 
-ROOM_JID = "plop@conference.akario.local"
-SECOND_BOT = "bot_2"
+from config import ADMIN_NS
+from config import SECOND_BOT
+from config import ROOM_JID
+
+from ConformanceUtils import init_test
 
 class EchoBot(ClientXMPP):
 
@@ -112,17 +114,7 @@ class SecondBot(ClientXMPP):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
+    init_test(
+        class_first_bot = EchoBot,
+        class_second_bot = SecondBot
     )
-
-    xmpp = EchoBot('allan@akario.local', 'plop', "bot_1")
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
-
-    xmpp2 = SecondBot('psi@akario.local', 'plop', SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)

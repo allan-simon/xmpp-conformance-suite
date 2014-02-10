@@ -3,8 +3,6 @@ from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-
 from ConformanceUtils import init_test
 
 from config import OWNER_BOT

@@ -1,10 +1,11 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-DISCO_INFO_NS = "http://jabber.org/protocol/disco#info"
+from config import DISCO_INFO_NS
+
+from ConformanceUtils import init_test_one_bot
 
 class EchoBot(ClientXMPP):
 
@@ -43,7 +44,7 @@ class EchoBot(ClientXMPP):
             if (stanza['query'] == DISCO_INFO_NS):
                 print("[pass]")
             else:
-                print['[fail]']
+                print('[fail]')
         except IqError as e:
             print("[fail]")
         except IqTimeout:
@@ -52,12 +53,4 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
-
-    xmpp = EchoBot('allan@akario.local', 'plop', "bot_1")
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
+    init_test_one_bot(EchoBot)

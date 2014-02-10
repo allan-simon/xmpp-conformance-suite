@@ -1,14 +1,10 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
-from sleekxmpp.exceptions import IqError
-from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-ADMIN_NS = "http://jabber.org/protocol/muc#admin"
+from ConformanceUtils import init_test
 
-ROOM_JID = "plop@conference.akario.local"
-SECOND_BOT = "bot_2"
+from config import ROOM_JID
+from config import SECOND_BOT
 TRY_SEND_MESSAGE = "try send message"
 FORBIDDEN_MESSAGE = "nobody allow me to talk"
 
@@ -108,11 +104,6 @@ class SecondBot(ClientXMPP):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.ERROR,
-        format='%(levelname)-8s %(message)s'
-    )
-
     print(
         "If a room participant with role visitor try to send a message " +
         "it should return a message error forbidden ..." ,
@@ -120,12 +111,7 @@ if __name__ == '__main__':
         end=''
     )
 
-    xmpp = EchoBot('allan@akario.local', 'plop', "bot_1")
-    xmpp.register_plugin('xep_0045')
-    xmpp.connect()
-    xmpp.process(block=False)
-
-    xmpp2 = SecondBot('psi@akario.local', 'plop', SECOND_BOT)
-    xmpp2.register_plugin('xep_0045')
-    xmpp2.connect()
-    xmpp2.process(block=False)
+    init_test(
+        class_first_bot = EchoBot,
+        class_second_bot = SecondBot
+    )
