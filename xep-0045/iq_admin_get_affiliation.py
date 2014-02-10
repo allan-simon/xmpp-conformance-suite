@@ -5,7 +5,7 @@ from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
 
-from ConformanceUtils import init_test
+from ConformanceUtils import init_test_one_bot
 
 from config import ADMIN_NS
 
@@ -60,7 +60,4 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
-    init_test(
-        number_of_bot = 1,
-        class_first_bot = EchoBot
-    )
+    init_test_one_bot(EchoBot)
