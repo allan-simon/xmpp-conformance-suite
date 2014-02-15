@@ -1,9 +1,11 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
+from config import ROOM_JID
+
 from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 class EchoBot(ClientXMPP):
 
@@ -26,14 +28,8 @@ class EchoBot(ClientXMPP):
 
         iq = self.make_iq_get(
             queryxmlns="whatever",
-            ito="plop@conference.akario.local"
+            ito=ROOM_JID
         )
-        print(
-            "An iq to a group, without a known namespace in its query, should fail with 'error type='cancel' ...",
-            sep = ' ',
-            end=''
-        )
-
         try:
             stanza = iq.send(
                 timeout=3
@@ -51,4 +47,9 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
+    print_test_description(
+        "An iq to a group, without a known namespace in its query," +
+        "should fail with 'error type='cancel' ..."
+    )
+
     init_test_one_bot(EchoBot)

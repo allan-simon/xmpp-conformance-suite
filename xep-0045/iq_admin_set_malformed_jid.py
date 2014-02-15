@@ -1,4 +1,3 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
@@ -8,7 +7,8 @@ from sleekxmpp.xmlstream import ET
 from config import ADMIN_NS
 from config import ROOM_JID
 
-from ConformanceUtils import init_test
+from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 class EchoBot(ClientXMPP):
 
@@ -41,13 +41,6 @@ class EchoBot(ClientXMPP):
         query.append(item)
         iq.append(query)
 
-        print(
-            "An Admin set iq with a malformed jid attribute in item tag  " +
-            "should return a jid-malformed error ..." ,
-            sep = ' ',
-            end=''
-        )
-
         try:
             stanza = iq.send()
             print('[fail]')
@@ -62,7 +55,9 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
-    init_test(
-        number_of_bot = 1,
-        class_first_bot = EchoBot
+    print_test_description(
+        "An Admin set iq with a malformed jid attribute in item tag  " +
+        "should return a jid-malformed error ..."
     )
+
+    init_test_one_bot(EchoBot)

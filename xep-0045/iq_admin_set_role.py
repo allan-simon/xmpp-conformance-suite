@@ -1,4 +1,3 @@
-from __future__ import print_function
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
@@ -9,6 +8,7 @@ from config import ROOM_JID
 from config import SECOND_BOT
 
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 from JoinMUCBot import JoinTestMUCBot
 
@@ -48,13 +48,6 @@ class EchoBot(JoinTestMUCBot):
         query.append(item)
         iq.append(query)
 
-        print(
-            "An Admin set iq with an existing role in item tag  " +
-            "should return a 'result' iq ..." ,
-            sep = ' ',
-            end=''
-        )
-
         try:
             stanza = iq.send()
             print('[pass]')
@@ -87,6 +80,11 @@ class SecondBot(JoinTestMUCBot):
 
 
 if __name__ == '__main__':
+    print_test_description(
+        "An Admin set iq with an existing role in item tag  " +
+        "should return a 'result' iq ..."
+    )
+
     init_test(
         class_first_bot = EchoBot,
         class_second_bot = SecondBot

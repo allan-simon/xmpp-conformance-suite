@@ -1,4 +1,3 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
@@ -6,6 +5,7 @@ from sleekxmpp.exceptions import IqTimeout
 from sleekxmpp.xmlstream import ET
 
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 from config import ADMIN_NS
 from config import SECOND_BOT
@@ -49,13 +49,6 @@ class EchoBot(ClientXMPP):
         )
         query.append(item)
         iq.append(query)
-
-        print(
-            "An Admin set iq with role=none to a given nick  " +
-            "should kick that user from current room ..." ,
-            sep = ' ',
-            end=''
-        )
 
         try:
             stanza = iq.send()
@@ -116,6 +109,12 @@ class SecondBot(ClientXMPP):
         )
 
 if __name__ == '__main__':
+    print_test_description(
+        "An Admin set iq with role=none to a given nick  " +
+        "should kick that user from current room ..."
+    )
+
+
     init_test(
         class_first_bot = EchoBot,
         class_second_bot = SecondBot

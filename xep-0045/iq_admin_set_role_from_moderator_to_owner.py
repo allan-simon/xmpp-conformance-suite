@@ -1,9 +1,9 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 from config import OWNER_BOT
 from config import SECOND_BOT
@@ -94,11 +94,9 @@ class SecondBot(ClientXMPP):
         )
 
 if __name__ == '__main__':
-    print(
+    print_test_description(
         "If a non owner/admin moderator try to change the role of the owner " +
-        "it should return a not-allowed error ..." ,
-        sep = ' ',
-        end=''
+        "it should return a not-allowed error ..."
     )
 
     init_test(

@@ -1,11 +1,12 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from config import DISCO_INFO_NS
+from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 class EchoBot(ClientXMPP):
 
@@ -28,14 +29,9 @@ class EchoBot(ClientXMPP):
 
         iq = self.make_iq_get(
             queryxmlns=DISCO_INFO_NS,
-            ito="plop@conference.akario.local"
+            ito=ROOM_JID
         )
 
-        print(
-            "An iq to a group, for disco info should success ...",
-            sep = ' ',
-            end=''
-        )
 
         try:
             stanza = iq.send(
@@ -53,4 +49,7 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
+    print_test_description(
+        "An iq to a group, for disco info should success ..."
+    )
     init_test_one_bot(EchoBot)

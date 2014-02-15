@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
@@ -11,6 +9,7 @@ from config import SECOND_BOT
 from config import ROOM_JID
 
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 class EchoBot(ClientXMPP):
 
@@ -44,13 +43,6 @@ class EchoBot(ClientXMPP):
         )
         query.append(item)
         iq.append(query)
-
-        print(
-            "An Admin set iq with a non existing role in item tag  " +
-            "should return a not-acceptable error ..." ,
-            sep = ' ',
-            end=''
-        )
 
         try:
             stanza = iq.send()
@@ -114,6 +106,11 @@ class SecondBot(ClientXMPP):
 
 
 if __name__ == '__main__':
+    print_test_description(
+        "An Admin set iq with a non existing role in item tag  " +
+        "should return a not-acceptable error ..."
+    )
+
     init_test(
         class_first_bot = EchoBot,
         class_second_bot = SecondBot

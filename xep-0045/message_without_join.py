@@ -1,5 +1,4 @@
 from __future__ import print_function
-import logging
 from sleekxmpp import ClientXMPP
 
 from ConformanceUtils import init_test

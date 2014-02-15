@@ -1,9 +1,9 @@
-from __future__ import print_function
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 from JoinMUCBot import JoinTestMUCBot
 
@@ -86,11 +86,9 @@ class SecondBot(JoinTestMUCBot):
 
 if __name__ == '__main__':
 
-    print(
+    print_test_description(
         "An admin iq with something different than a 'item' tag as child " +
-        "of query should return a bad-request error ..." ,
-        sep = ' ',
-        end=''
+        "of query should return a bad-request error ..."
     )
 
     init_test(

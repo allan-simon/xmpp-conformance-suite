@@ -1,9 +1,10 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
+from config import ROOM_JID
 from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 class EchoBot(ClientXMPP):
 
@@ -23,11 +24,6 @@ class EchoBot(ClientXMPP):
             wait=True
         )
 
-        print(
-            "An iq to a group, for disco items should success ...",
-            sep = ' ',
-            end=''
-        )
 
         try:
 
@@ -35,12 +31,7 @@ class EchoBot(ClientXMPP):
                 jid="plop@conference.akario.local",
                 block=True
             )
-            print('[pass]')
-            print(
-                "an disco items iq to a group should return ourself...",
-                sep=' ',
-                end=''
-            )
+
             discoItems = items['disco_items']['items']
             if (len(discoItems) == 1):
                 for item in discoItems:
@@ -58,4 +49,8 @@ class EchoBot(ClientXMPP):
         self.disconnect()
 
 if __name__ == '__main__':
+    print_test_description(
+        "An iq to a group, for disco items should success and " +
+        " return ourself..."
+    )
     init_test_one_bot(EchoBot)

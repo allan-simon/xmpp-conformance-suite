@@ -1,10 +1,10 @@
-from __future__ import print_function
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
 
 from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 from config import ADMIN_NS
 from config import ROOM_JID
@@ -52,12 +52,9 @@ class EchoBot(JoinTestMUCBot):
         self.disconnect()
 
 if __name__ == '__main__':
-    print(
+    print_test_description(
         "a admin get iq to get all occupants with affiliation " +
-        " 'owner',should succeed if made by the owner  ..." ,
-        sep = ' ',
-        end=''
+        " 'owner',should succeed if made by the owner  ..."
     )
-
 
     init_test_one_bot(EchoBot)

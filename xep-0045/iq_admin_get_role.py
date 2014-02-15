@@ -1,4 +1,3 @@
-from __future__ import print_function
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
@@ -8,6 +7,7 @@ from config import ADMIN_NS
 from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
+from ConformanceUtils import print_test_description
 
 from JoinMUCBot import JoinTestMUCBot
 
@@ -38,12 +38,6 @@ class EchoBot(JoinTestMUCBot):
         query.append(item)
         iq.append(query)
 
-        print(
-            "a admin get iq to get all occupants with role " +
-            " 'moderator',should succeed if made by one of the moderator  ..." ,
-            sep = ' ',
-            end=''
-        )
 
         try:
             stanza = iq.send()
@@ -67,4 +61,9 @@ class EchoBot(JoinTestMUCBot):
         self.disconnect()
 
 if __name__ == '__main__':
+
+    print_test_description(
+        "a admin get iq to get all occupants with role " +
+        " 'moderator',should succeed if made by one of the moderator  ..."
+    )
     init_test_one_bot(EchoBot)
