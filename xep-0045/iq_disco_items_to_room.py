@@ -19,7 +19,7 @@ class EchoBot(ClientXMPP):
 
 
         self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
+            ROOM_JID,
             self.nick,
             wait=True
         )
@@ -28,7 +28,7 @@ class EchoBot(ClientXMPP):
         try:
 
             items = self['xep_0030'].get_items(
-                jid="plop@conference.akario.local",
+                jid=ROOM_JID,
                 block=True
             )
 

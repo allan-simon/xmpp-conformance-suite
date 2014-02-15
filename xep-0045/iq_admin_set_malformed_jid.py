@@ -23,13 +23,13 @@ class EchoBot(ClientXMPP):
 
 
         self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
+            ROOM_JID,
             self.nick,
             wait=True
         )
 
         iq = self.makeIqSet()
-        iq['to'] = "plop@conference.akario.local"
+        iq['to'] = ROOM_JID
         query = ET.Element('{%s}query' % ADMIN_NS)
         item = ET.Element(
             'item',

@@ -21,7 +21,7 @@ class EchoBot(ClientXMPP):
 
 
         self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
+            ROOM_JID,
             self.nick,
             wait=True
         )
