@@ -3,7 +3,9 @@ from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from sleekxmpp.xmlstream import ET
+
 from config import ADMIN_NS
+from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
 from ConformanceUtils import print_test_description
@@ -21,13 +23,13 @@ class EchoBot(ClientXMPP):
 
 
         self.plugin['xep_0045'].joinMUC(
-            "plop@conference.akario.local",
+            ROOM_JID,
             self.nick,
             wait=True
         )
 
         iq = self.makeIqGet()
-        iq['to'] = "plop@conference.akario.local"
+        iq['to'] = ROOM_JID
         query = ET.Element('{%s}query' % ADMIN_NS)
         item = ET.Element('item')
         query.append(item)

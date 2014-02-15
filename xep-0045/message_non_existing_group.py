@@ -1,6 +1,8 @@
 from __future__ import print_function
 from sleekxmpp import ClientXMPP
 
+from config import ROOM_JID
+
 from ConformanceUtils import init_test
 
 class EchoBot(ClientXMPP):
@@ -15,7 +17,7 @@ class EchoBot(ClientXMPP):
         self.send_presence()
 
         self.send_message(
-            mto="plop@conference.akario.local",
+            mto=ROOM_JID,
             mbody="Echo, from ",
             mtype='groupchat'
         )

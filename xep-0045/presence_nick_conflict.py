@@ -5,6 +5,7 @@ from ConformanceUtils import spawn_muc_bot
 
 from config import ROOM_JID
 from config import SECOND_BOT_JID
+from config import BOT_PASSWORD
 from config import OWNER_BOT
 
 from JoinMUCBot import JoinTestMUCBot
@@ -78,4 +79,4 @@ if __name__ == '__main__':
     )
 
     init_test_one_bot(EchoBot)
-    spawn_muc_bot(SecondBot, SECOND_BOT_JID, 'plop', OWNER_BOT)
+    spawn_muc_bot(SecondBot, SECOND_BOT_JID, BOT_PASSWORD, OWNER_BOT)
