@@ -1,6 +1,7 @@
 '''
     Set of utils to quickly create test
 '''
+from __future__ import print_function
 
 import logging
 from config import SECOND_BOT
@@ -9,11 +10,15 @@ from config import OWNER_BOT
 from config import OWNER_BOT_JID
 from config import BOT_PASSWORD
 
+
 def TEST_PASSED ():
     print('[pass]')
 
 def TEST_FAILED ():
     print('[fail]')
+
+def print_test_description(description):
+    print(description, end = '')
 
 
 def init_test(
