@@ -17,10 +17,7 @@ class EchoBot(JoinTestMUCBot):
     def __init__(self, jid, password, nick):
         JoinTestMUCBot.__init__(self, jid, password, nick)
 
-    def participant_online(self, msg):
-        if msg['muc'].getNick() != SECOND_BOT:
-            return
-
+    def other_participant_online(self, msg):
         try:
             self.make_set_role_iq(role="none").send()
 

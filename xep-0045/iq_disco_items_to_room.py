@@ -12,12 +12,11 @@ class EchoBot(JoinTestMUCBot):
     def __init__(self, jid, password, nick):
         JoinTestMUCBot.__init__(self, jid, password, nick)
 
-    def participant_online(self, msg):
-        if msg['muc'].getNick() != self.nick:
-            print("[fail]")
-            self.disconnect()
-            return
+    def other_participant_online(self, msg):
+        print("[fail]")
+        self.disconnect()
 
+    def self_online_in_muc(self, msg):
         try:
 
             items = self['xep_0030'].get_items(

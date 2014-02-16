@@ -28,25 +28,24 @@ class SecondBot(JoinTestMUCBot):
     def __init__(self, jid, password, nick):
         JoinTestMUCBot.__init__(self, jid, password, nick)
 
-    def participant_online(self, msg):
+    def other_participant_online(self, msg):
 
-        if msg['muc'].getNick() == OWNER_BOT:
-            # we try to set the owner as simple 'participant'
-            try:
-                self.plugin['xep_0045'].setRole(
-                    ROOM_JID,
-                    OWNER_BOT,
-                    'participant'
-                )
-            except IqError as e:
-                if e.iq['error']['condition'] == 'not-allowed':
-                    print('[pass]')
-                else:
-                    print('[fail]')
-            except IqTimeout:
-                print("[fail]")
+        # we try to set the owner as simple 'participant'
+        try:
+            self.plugin['xep_0045'].setRole(
+                ROOM_JID,
+                OWNER_BOT,
+                'participant'
+            )
+        except IqError as e:
+            if e.iq['error']['condition'] == 'not-allowed':
+                print('[pass]')
+            else:
+                print('[fail]')
+        except IqTimeout:
+            print("[fail]")
 
-            self.disconnect()
+        self.disconnect()
 
     def participant_offline(self, presence):
         # if we receive a "offline" from ourself

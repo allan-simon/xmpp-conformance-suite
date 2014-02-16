@@ -22,18 +22,17 @@ class FirstBot(JoinTestMUCBot):
         if presence['from'].bare == SECOND_BOT_JID:
             self.disconnect()
 
-    def participant_online(self, msg):
+    def self_online_in_muc(self, msg):
         # we arrive here when the group acknolwedge our presence
         # so at this step the group is existing
         # which is important, otherwise we will be in the case
         # "sending a message to a non existing group"
-        if msg['muc'].getNick() == OWNER_BOT:
-            # we tell the other bot, he can try to send a message
-            self.send_message(
-                mto=SECOND_BOT_JID,
-                mbody=ASK_SECOND_BOT_TO_SEND_MUC_MESSAGE
-            )
-            return
+
+        # we tell the other bot, he can try to send a message
+        self.send_message(
+            mto=SECOND_BOT_JID,
+            mbody=ASK_SECOND_BOT_TO_SEND_MUC_MESSAGE
+        )
 
 
 class SecondBot(ClientXMPP):

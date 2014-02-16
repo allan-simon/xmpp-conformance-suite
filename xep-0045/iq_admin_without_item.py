@@ -19,10 +19,7 @@ class EchoBot(JoinTestMUCBot):
         JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler("got_offline", self.got_offline)
 
-    def participant_online(self, msg):
-        if msg['muc'].getNick() != SECOND_BOT:
-            return
-
+    def other_participant_online(self, msg):
         try:
             self.make_set_role_iq(childtag="NOT-ITEM", role="none").send()
             print("[fail]")

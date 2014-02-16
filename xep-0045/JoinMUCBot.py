@@ -25,6 +25,16 @@ class JoinTestMUCBot(ClientXMPP):
         )
 
     def participant_online(self, msg):
+        if msg['muc'].getNick() != self.nick:
+           self.other_participant_online(msg)
+        else:
+           self.self_online_in_muc(msg)
+        pass
+
+    def self_online_in_muc(self, msg):
+        pass
+
+    def other_participant_online(self, msg):
         pass
 
     def participant_offline(self, msg):
