@@ -1,4 +1,3 @@
-from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
@@ -8,30 +7,27 @@ from config import ROOM_JID
 from ConformanceUtils import init_test_one_bot
 from ConformanceUtils import print_test_description
 
-class EchoBot(ClientXMPP):
+from JoinMUCBot import JoinTestMUCBot
+
+class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
+        JoinTestMUCBot.__init__(self, jid, password, nick)
+        self.add_event_handler(
+            "muc::%s::got_online" % ROOM_JID,
+            self.participant_online
         )
 
+    def participant_online(self, msg):
+        if msg['muc'].getNick() != self.nick:
+            print("[fail]")
+            self.disconnect()
+            return
 
         iq = self.make_iq_get(
             queryxmlns=DISCO_INFO_NS,
             ito=ROOM_JID
         )
-
 
         try:
             stanza = iq.send(

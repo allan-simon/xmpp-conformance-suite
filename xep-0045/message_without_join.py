@@ -1,7 +1,8 @@
-from __future__ import print_function
 from sleekxmpp import ClientXMPP
+from JoinMUCBot import JoinTestMUCBot
 
 from ConformanceUtils import init_test
+from ConformanceUtils import print_test_description
 
 from config import OWNER_BOT
 from config import SECOND_BOT_JID
@@ -10,27 +11,15 @@ from config import ROOM_JID
 
 ASK_SECOND_BOT_TO_SEND_MUC_MESSAGE = "try to send a muc message without joining"
 
-class FirstBot(ClientXMPP):
+class FirstBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
-        ClientXMPP.__init__(self, jid, password)
-        self.nick = nick
-        self.add_event_handler("session_start", self.session_start)
+        JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler("got_offline", self.got_offline)
 
         self.add_event_handler(
             "muc::%s::got_online" % ROOM_JID,
             self.participant_online
-        )
-
-    def session_start(self, event):
-        self.get_roster()
-        self.send_presence()
-
-        self.plugin['xep_0045'].joinMUC(
-            ROOM_JID,
-            self.nick,
-            wait=True
         )
 
     def got_offline(self, presence):
@@ -84,11 +73,9 @@ class SecondBot(ClientXMPP):
 
 if __name__ == '__main__':
 
-    print(
+    print_test_description(
         "If someone try to send a message to a group he's not part of " +
-        "it should return a not-acceptable error ..." ,
-        sep = ' ',
-        end=''
+        "it should return a not-acceptable error ..."
     )
 
     init_test(
