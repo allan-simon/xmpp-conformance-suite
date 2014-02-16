@@ -1,8 +1,6 @@
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-
 from ConformanceUtils import init_test_one_bot
 from ConformanceUtils import print_test_description
 
@@ -26,18 +24,11 @@ class EchoBot(JoinTestMUCBot):
             self.disconnect()
             return
 
-        iq = self.makeIqGet()
-        iq['to'] = ROOM_JID
-        query = ET.Element('{%s}query' % ADMIN_NS)
-        item = ET.Element(
-            'item',
-            {'affiliation' : 'owner'}
-        )
-        query.append(item)
-        iq.append(query)
-
         try:
-            stanza = iq.send()
+            stanza = self.make_admin_get_iq(
+                key="affiliation",
+                value="owner"
+            ).send()
             #TODO make a more in-depth test, it's supposed
             #to return the list of owner (i.e at least current nick)
             if (stanza['query'] == ADMIN_NS):

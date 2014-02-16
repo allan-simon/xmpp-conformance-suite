@@ -1,9 +1,7 @@
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
 
-from config import ADMIN_NS
 from config import ROOM_JID
 from config import SECOND_BOT
 
@@ -33,23 +31,8 @@ class EchoBot(JoinTestMUCBot):
         if msg['muc'].getNick() != SECOND_BOT:
             return
 
-        #TODO: in current version of sleekxmpp (as of january 2014)
-        # the setRole function is buggy, so we have to forge the iq ourself
-        iq = self.makeIqSet()
-        iq['to'] = ROOM_JID
-        query = ET.Element('{%s}query' % ADMIN_NS)
-        item = ET.Element(
-            'item',
-            {
-                'role' : 'moderator',
-                'nick'  : SECOND_BOT
-            }
-        )
-        query.append(item)
-        iq.append(query)
-
         try:
-            stanza = iq.send()
+            self.make_set_role_iq().send()
             print('[pass]')
 
         except IqError as e:

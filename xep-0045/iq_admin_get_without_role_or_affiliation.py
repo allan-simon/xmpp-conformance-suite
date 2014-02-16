@@ -1,9 +1,6 @@
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-
-from config import ADMIN_NS
 from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
@@ -27,15 +24,8 @@ class EchoBot(JoinTestMUCBot):
             self.disconnect()
             return
 
-        iq = self.makeIqGet()
-        iq['to'] = ROOM_JID
-        query = ET.Element('{%s}query' % ADMIN_NS)
-        item = ET.Element('item')
-        query.append(item)
-        iq.append(query)
-
         try:
-            iq.send()
+            self.make_admin_get_iq(key="not-role-not-affiliation").send()
         except IqError as e:
             if (e.iq['error']['type'] == 'cancel'):
                 print("[pass]")

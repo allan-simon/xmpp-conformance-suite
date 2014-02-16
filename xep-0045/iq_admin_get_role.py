@@ -1,8 +1,6 @@
 from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
-from sleekxmpp.xmlstream import ET
-
 from config import ADMIN_NS
 from config import ROOM_JID
 
@@ -27,20 +25,8 @@ class EchoBot(JoinTestMUCBot):
             self.disconnect()
             return
 
-        #TODO: can be replaced by a getRole function I suppose
-        iq = self.makeIqGet()
-        iq['to'] = ROOM_JID
-        query = ET.Element('{%s}query' % ADMIN_NS)
-        item = ET.Element(
-            'item',
-            {'role' : 'moderator'}
-        )
-        query.append(item)
-        iq.append(query)
-
-
         try:
-            stanza = iq.send()
+            stanza = self.make_admin_get_iq().send()
             #TODO make a more in-depth test, it's supposed
             #to return the list of owner (i.e at least current nick)
             query = stanza.xml.find('{%s}query' % ADMIN_NS)
