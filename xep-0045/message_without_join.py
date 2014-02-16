@@ -17,11 +17,6 @@ class FirstBot(JoinTestMUCBot):
         JoinTestMUCBot.__init__(self, jid, password, nick)
         self.add_event_handler("got_offline", self.got_offline)
 
-        self.add_event_handler(
-            "muc::%s::got_online" % ROOM_JID,
-            self.participant_online
-        )
-
     def got_offline(self, presence):
         # when the second disconnect we disconnect to
         if presence['from'].bare == SECOND_BOT_JID:

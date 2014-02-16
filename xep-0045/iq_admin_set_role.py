@@ -17,15 +17,6 @@ class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
         JoinTestMUCBot.__init__(self, jid, password, nick)
-        self.add_event_handler(
-            "muc::%s::got_online" % ROOM_JID,
-            self.participant_online
-        )
-
-        self.add_event_handler(
-            "muc::%s::got_offline" % ROOM_JID,
-            self.participant_offline
-        )
 
     def participant_online(self, msg):
         if msg['muc'].getNick() != SECOND_BOT:

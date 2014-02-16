@@ -2,7 +2,6 @@ from sleekxmpp.exceptions import IqError
 from sleekxmpp.exceptions import IqTimeout
 
 from config import ADMIN_NS
-from config import ROOM_JID
 
 from ConformanceUtils import init_test_one_bot
 from ConformanceUtils import print_test_description
@@ -13,11 +12,6 @@ class EchoBot(JoinTestMUCBot):
 
     def __init__(self, jid, password, nick):
         JoinTestMUCBot.__init__(self, jid, password, nick)
-        self.add_event_handler(
-            "muc::%s::got_online" % ROOM_JID,
-            self.participant_online
-        )
-
 
     def participant_online(self, msg):
         if msg['muc'].getNick() != self.nick:

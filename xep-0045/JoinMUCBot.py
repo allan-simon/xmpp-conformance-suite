@@ -19,8 +19,15 @@ class JoinTestMUCBot(ClientXMPP):
             self.participant_online
         )
 
+        self.add_event_handler(
+            "muc::%s::got_offline" % ROOM_JID,
+            self.participant_offline
+        )
 
     def participant_online(self, msg):
+        pass
+
+    def participant_offline(self, msg):
         pass
 
     def make_set_role_iq(
